@@ -1,3 +1,5 @@
+# file to quickly test stuff
+
 import subprocess
 import sys
 
@@ -38,5 +40,3 @@ google_restaurants = dd.read_json(
      nrows=1000)
 google_restaurants.to_csv("./data/google-restaurants.csv")
 
-
-# EDA

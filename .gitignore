@@ -140,4 +140,4 @@ ui-tests/.pnp.*
 test-checkpoint*
 test*
 *.amltmp
-*/data/*
+*/.amltmp

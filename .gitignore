@@ -141,3 +141,5 @@ test-checkpoint*
 test*
 *.amltmp
 */.amltmp
+data
+data/**

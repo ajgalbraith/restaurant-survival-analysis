@@ -27,12 +27,12 @@ Yelp datasets provide a vast amount of information about businesses, including t
 ### Feature Selection
 1. Correlation heatmaps were used to identify relevant features.
 2. Over and under sampling techniques were applied to address class imbalances.
-3. `SelectKBest` was used to identify the top 5 relevant features.
+3. `SelectKBest` was used to identify the top 5 relevant features. Avoid overfitting by using too many irrelevant features that might not have strong predictive values.
 4. Principal Component Analysis (PCA) was employed to further reduce dimensionality.
 
 ### Model Building and Evaluation
 1. **Baseline Model:** A RandomForest classifier was trained on the data.
-2. **Ensemble Strategy:** Stacking Classifier was used with estimators like DecisionTree, RandomForest, GradientBoosting, and LogisticRegression.
+2. **Ensemble Strategy:** Stacking Classifier was used with estimators like DecisionTree, RandomForest, GradientBoosting, and LogisticRegression. Aim to even out errors and eliminate model variance.
 3. **Hyperparameter tuning:** GridSearchCV was employed on the Stacking Classifier to find optimal hyperparameters.
 4. Models were evaluated using metrics such as accuracy, ROC-AUC, and precision-recall curves.
 
@@ -42,6 +42,8 @@ Yelp datasets provide a vast amount of information about businesses, including t
 2. **Missing Data:** A large chunk of data had missing values. An approach of dropping columns with more than 20% missing values might be too aggressive.
 3. **Class Imbalance:** The target variable, 'is_open', may be imbalanced. Random over-sampling and under-sampling techniques were employed to address this, but more sophisticated methods like SMOTE could also be considered.
 4. **Feature Selection:** While `SelectKBest` was used, other techniques or domain expertise could further refine feature selection.
+5. **Small Yelp dataset:** Yelp's research dataset does not contain big cities like New York or LA. Yelp's API is only for developers, not researchers. Hard to combine with other alternative data sources that are only publicly available for big cities.
+6. **Google data:**
 
 ## Discussion of Results
 

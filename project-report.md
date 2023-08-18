@@ -43,7 +43,9 @@ Yelp datasets provide a vast amount of information about businesses, including t
 3. **Class Imbalance:** The target variable, 'is_open', may be imbalanced. Random over-sampling and under-sampling techniques were employed to address this, but more sophisticated methods like SMOTE could also be considered.
 4. **Feature Selection:** While `SelectKBest` was used, other techniques or domain expertise could further refine feature selection.
 5. **Small Yelp dataset:** Yelp's research dataset does not contain big cities like New York or LA. Yelp's API is only for developers, not researchers. Hard to combine with other alternative data sources that are only publicly available for big cities.
-6. **Google data:**
+6. **Aspect sentiment analysis of reviews:** Using GPT to get sentiment proved impractical (much better and cheaper tools exist, slow api requests, service breaks often, inconsistent responses)
+7. **Google data:**
+8. **Time series:**
 
 ## Discussion of Results
 

@@ -77,7 +77,7 @@ Best-performing model: GDA with test accuracies ranging from 55% to 60%.
 ### Preprocessing Steps
 1. **Loading necessary libraries:** `dask`, `distributed`, `AST`, and `tqdm`.
    - The Dask library in Python provides a powerful and flexible framework for parallel and distributed computing. It is particularly beneficial when working with large datasets that cannot fit into memory or when dealing with computationally intensive tasks. Dask enables parallel execution of tasks, which can significantly speed up computations. It automatically divides the data and tasks into smaller chunks and processes them concurrently, utilizing all available CPU core
-  - Tqdm library provides progress bars to loops and iterators, allowing the tracking of progress, especially for dealing with large datasets and lengthy computations
+   - Tqdm library provides progress bars to loops and iterators, allowing the tracking of progress, especially for dealing with large datasets and lengthy computations
 
 3. **Loading and basic cleaning:** Remove columns with identifiers, filter for non-restaurants, and deal with missing values.
 4. **Filter popular restaurants:** Only take restaurants that have more than 50 reviews. Restaurants with too few reviews might have risk of bias opinions
@@ -113,12 +113,61 @@ Best-performing model: GDA with test accuracies ranging from 55% to 60%.
 ## Discussion of Results
 
 1. **Feature Importance:** Correlation heatmaps and `SelectKBest` suggest that certain features like 'stars', 'review_count', and 'RestaurantsPriceRange2' play pivotal roles.
+(add correlation heatmap here)
+Correlation heatmap shows the correlation coefficients, which are statistical measures that quantify the strength and direction of the linear relationship between two variables. Hence, any other types of relationship between the features and the label will not be represent
+
+```python
+Best 5 features:
+Index(['review_count', 'HasTV', 'RestaurantsDelivery', 'street', 'lot'], dtype='object')
+```
+SelectKBest helps select the top k features that have the strongest relationship with the target variable, but does not take into account the interaction between different features.
+
 2. **PCA:** The scree plot indicated the importance of each principal component. It's valuable to decide how many components to retain.
-3. **Model Performance:** The baseline RandomForest model showed decent accuracy and ROC-AUC values. However, the Stacking Classifier, after hyperparameter tuning, showed promise in improving the predictive power.
-4. **Precision-Recall Curves:** Both models (RandomForest and Stacking Classifier) were compared using precision-recall curves, which is crucial in imbalanced datasets.
-5. **Confusion Matrices:** These matrices provided insights into the true positive, false positive, true negative, and false negative values for the models, allowing for a deeper understanding of model performance.
+(add PCA scree plot here)
+
+3. **Dealing with imbalanced data:** after filtering, there are 17060 open restaurants and 5374 closed restaurants. Although there are fewer closed restaurants, the proportion is not too imbalanced since closed restaurants make up about 24% of the data points (usually we have to concern when one label is less than 5%). However, we still tried methods of oversampling and undersampling. Oversampling gives almost near perfect performance, which flags a sign of overfitting since testing data might replicate training data due to bootstrapping.
+
+4. **Model Performance:** The baseline RandomForest model showed decent accuracy and ROC-AUC values. However, the Stacking Classifier, after hyperparameter tuning, showed promise in improving the predictive power.
+5. **Precision-Recall Curves:** Both models (RandomForest and Stacking Classifier) were compared using precision-recall curves, which is crucial in imbalanced datasets.
+   
+   Precision =  True Positives / (True Positives + False Positives)
+   
+   Recall = True Positives / (True Positives + False Negatives)
+
+(add precision recall curve here)
+
+7. **Confusion Matrices:** These matrices provided insights into the true positive, false positive, true negative, and false negative values for the models, allowing for a deeper understanding of model performance.
+- Default random forest (no resampling)
+
+|  | Predicted: Open | Predicted: Closed |
+|----------|----------|----------|
+| **Actual: Open** | 4848 | 235 |
+| **Actual: Closed** | 1152 | 496 |
+
+- Default random forest (oversampling)
+
+|  | Predicted: Open | Predicted: Closed |
+|----------|----------|----------|
+| **Actual: Open** | 4450 | 656 |
+| **Actual: Closed** | 297 | 4833 |
+
+- Default random forest (undersampling)
+
+|  | Predicted: Open | Predicted: Closed |
+|----------|----------|----------|
+| **Actual: Open** | 1090 | 515 |
+| **Actual: Closed** | 524 | 1096 |
+
+- Ensemble model with grid search to optimize accuracy (oversampling)
+
+|  | Predicted: Open | Predicted: Closed |
+|----------|----------|----------|
+| **Actual: Open** | 4844 | 262 |
+| **Actual: Closed** | 414 | 4716 |
 
 ## Conclusion
 Through rigorous preprocessing and modeling techniques, we've managed to build predictive models on the Yelp dataset to determine if a restaurant remains open. The Stacking Classifier seems to be the more promising approach, outperforming the baseline RandomForest model. This study can be beneficial for stakeholders interested in understanding the dynamics of restaurant operations using Yelp data.
 
 Future research can explore more sophisticated preprocessing methods, employ different feature selection techniques, and utilize more advanced modeling strategies for better results.
+
+Also, since we have only been working with a small dataset, we hope to have the chance to explore our methodology using other sources of data, potentially from Google reviews.

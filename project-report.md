@@ -6,8 +6,67 @@
 ## Abstract
 This report details the methods, data preprocessing techniques, challenges, and results associated with analyzing the Yelp restaurants dataset. The ultimate goal is to prepare the data for model building and predict if a restaurant is open or not, based on its features.
 
+Machine learning models, including but not limited to DecisionTree, RandomForest, GradientBoosting, and LogisticRegression, are trained on the extracted features to predict the survival outcome of restaurants over a specific time period. The survival outcome is defined as the ability of a restaurant to remain operational or cease operations during the observed time frame. The predictive models are rigorously evaluated and fine-tuned using various performance metrics such as accuracy, precision, recall, and F1-score. Cross-validation techniques are employed to ensure the robustness and generalizability of the models. Additionally, feature importance analysis is conducted to identify the most influential factors contributing to a restaurant's survival rate.
+
 ## Introduction
-Yelp datasets provide a vast amount of information about businesses, including their attributes and reviews. Analyzing this data can yield insights into the factors that affect a restaurant's operational status.
+In today's dynamic culinary landscape, the restaurant industry is characterized by a high level of competitiveness and volatility. Understanding the factors that contribute to the success or failure of restaurants is crucial for both entrepreneurs and investors. This project aims to explore the potential of utilizing restaurant reviews from Yelp, a popular user-generated review platform, to predict the survival rate of restaurants. 
+
+Besides reviews, Yelp datasets also provide a vast amount of information about businesses, including their attributes such as opening hours and price range. Analyzing this data can yield insights into the factors that affect a restaurant's operational status.
+
+This paper delves into the intriguing realm of restaurant survival prediction by harnessing the combined power of restaurant reviews and attributes sourced from Yelp. We embark on a journey to uncover the latent insights concealed within the vast expanse of online reviews and intrinsic characteristics of restaurants. By leveraging advanced data analysis techniques, including Natural Language Processing (NLP) and machine learning, we aim to construct predictive models that shed light on the factors influencing the longevity of restaurants in this highly competitive industry.
+
+(Add something about NLP with OpenAI API here)
+
+## Literature review
+### “How was your meal?” Examining customer experience using Google maps reviews
+Study Objective: Predicting restaurant performance using customer reviews in the UK.
+Methods:
+Data collection from Google Maps.
+Sentiment analysis using VADER tool.
+Dataset: 5,010 restaurants / 935,386 reviews.
+Results:
+Food: Most influential attribute for 5-star ratings.
+Service: Key in minimizing 1-star reviews.
+Atmosphere: Significant in elevating 2-star to 3-star ratings.
+Value: Negative impact on 5-star ratings, positive impact on lower ratings.
+Valence Analysis:
+Alcoholic beverages: Positive impact on customer experiences.
+Dietary options: High valence, satisfying customers' requirements.
+Basic food items: Relatively low valence.
+Implications:
+Improve food, service, atmosphere, and value for enhanced performance.
+Prioritize improvements based on specific rating levels.
+Consider the impact of alcoholic beverages and dietary options.
+
+### Restaurant survival prediction using customer-generated content
+Objective: Predict restaurant survival using customer-generated content
+Methods: Aspect-Based Sentiment Analysis (ABSA) combined with Conditional Survival Forest (CSF) algorithm
+Dataset: Large-scale Yelp dataset w/ restaurant reviews, ratings, and relevant information
+ABSA-CSF Model:
+Extract sentiment from reviews based on important aspects
+Predict survival w/ extracted features
+Key Findings:
+ABSA-CSF model outperforms other models
+Location and ‘tastiness’ sentiment crucial for survival prediction
+Factors of importance vary by restaurant type
+Implications:
+Importance of online reviews in business survival
+Allocate resources based on essential factors
+Conclusion: ABSA-CSF model effectively predicts restaurant survival using online reviews
+
+### Predicting International Restaurant Success with Yelp
+Objective: Identify key features for restaurant success across different countries using the Yelp Dataset.
+Methods:
+Feature selection: Univariate feature selection 
+Classification models: Naive Bayes, logistic regression, SVM, decision trees, random forest, GDA.
+Textual analysis: Naive Bayes classifier for review analysis.
+Dataset:
+25,071 restaurants from the US, UK, Canada, and Germany.
+Yelp Dataset Challenge data.
+Results:
+Commonly important features: Street parking, reservations, review count, ambience, noise level, attire.
+Country-specific features: Divey ambience (US), parking (North America), alcohol availability (Europe).
+Best-performing model: GDA with test accuracies ranging from 55% to 60%.
 
 ## Methods
 
@@ -17,12 +76,16 @@ Yelp datasets provide a vast amount of information about businesses, including t
 
 ### Preprocessing Steps
 1. **Loading necessary libraries:** `dask`, `distributed`, `AST`, and `tqdm`.
-2. **Loading and basic cleaning:** Remove columns with identifiers, filter for non-restaurants, and deal with missing values.
-3. **Attributes mapping:** Extract and convert attribute columns like 'BusinessParking', 'GoodForMeal', 'Ambience' from nested structures to individual columns.
-4. **Feature reduction:** Columns with more than 20% missing values are dropped.
-5. **Type conversion:** String values are converted to integer types where applicable.
-6. **Feature encoding:** Some features are numerically encoded, like the 'Alcohol' column being mapped to ordinal numbers.
-7. **Merging dataframes:** The processed restaurant attributes are then merged with their corresponding reviews to produce a comprehensive dataset.
+   - The Dask library in Python provides a powerful and flexible framework for parallel and distributed computing. It is particularly beneficial when working with large datasets that cannot fit into memory or when dealing with computationally intensive tasks. Dask enables parallel execution of tasks, which can significantly speed up computations. It automatically divides the data and tasks into smaller chunks and processes them concurrently, utilizing all available CPU core
+  - Tqdm library provides progress bars to loops and iterators, allowing the tracking of progress, especially for dealing with large datasets and lengthy computations
+
+3. **Loading and basic cleaning:** Remove columns with identifiers, filter for non-restaurants, and deal with missing values.
+4. **Filter popular restaurants:** Only take restaurants that have more than 50 reviews. Restaurants with too few reviews might have risk of bias opinions
+5. **Attributes mapping:** Extract and convert attribute columns like 'BusinessParking', 'GoodForMeal', 'Ambience' from nested structures to individual columns.
+6. **Feature reduction:** Columns with more than 20% missing values are dropped.
+7. **Type conversion:**  String values are converted to integer types where applicable using one hot encoding or manual conversion. Some categories are self-translated into numerical based on their values instead of one hot encoding to avoid having too many columns. For example, noise level of quiet, average, loud and very loud would have the value of 0, 1, 2, 3.
+8. **Feature encoding:** Some features are numerically encoded, like the 'Alcohol' column being mapped to ordinal numbers.
+9. **Merging dataframes:** The processed restaurant attributes are then merged with their corresponding reviews to produce a comprehensive dataset.
 
 ### Feature Selection
 1. Correlation heatmaps were used to identify relevant features.
